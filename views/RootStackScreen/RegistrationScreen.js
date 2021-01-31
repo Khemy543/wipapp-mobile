@@ -7,7 +7,7 @@ import {
     ScrollView,
     TouchableOpacity,
     KeyboardAvoidingView,
-    TextInput,ActivityIndicator, Picker, Alert
+    TextInput,ActivityIndicator, Alert, SafeAreaView
 } from "react-native";
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -97,16 +97,16 @@ function Personal({navigation}) {
         }
     }
 
-    const handlePersonalSubmit=(name, email, phone, location ,password, confirmPassword, title)=>{
-        if(password === confirmPassword){
+    const handlePersonalSubmit=(data)=>{
+        if(data.password === data.confirmPassword){
                 axios.post(`${domain}/api/auth/register`,
                 {
-                    name:name,
-                    email:email,
-                    location:location,
-                    phone:phone,
-                    password:password,
-                    title:title
+                    name:data.name,
+                    email:data.email,
+                    location:data.location,
+                    phone:data.phone,
+                    password:data.password,
+                    title:data.title
                 })
                 .then(res=>{
                     console.log(res.data);
@@ -115,7 +115,7 @@ function Personal({navigation}) {
                     navigation.navigate('Login')
                 })
                 .catch(error=>{
-                    console.log(error);
+                    console.log(error.response.data);
                 })
             }
             else{
@@ -125,89 +125,66 @@ function Personal({navigation}) {
 
 
   return (
-    <ScrollView style={styles.container}>
-        <View>
-            <View style={{marginTop:90, marginBottom:50, alignItems:"center", justifyContent:"center"}}>
-                <Text style={[styles.text, {marginTop:10, fontSize:22, fontWeight:"500"}]}>Personal Account</Text>
-            </View>
+    <SafeAreaView style={styles.container}>
             <View>
-                <Text style={styles.inputTitle}>Name</Text>
-                <TextInput
-                    placeholder="Name"
-                    style={styles.input}
-                    onChangeText={(value)=>nameChange(value)}
-                />
-                <View style={{borderBottomWidth:1, borderBottomColor:"#D8D8D8"}}>
-
-                </View>
+                <Text style={[styles.text, {marginBottom:35, fontSize:22, fontWeight:"500"}]}>Personal Account</Text>
+            </View>
+            <View style={styles.inputView}>
+            <TextInput
+                style={styles.TextInput}
+                placeholder="Full Name"
+                placeholderTextColor="#003f5c"
+                onChangeText={(value=>nameChange(value))}
+            />
             </View>
 
-            <View>
-                <Text style={styles.inputTitle}>Email</Text>
-                <TextInput
-                    placeholder="Email"
-                    style={styles.input}
-                    onChangeText={(value)=>emailChange(value)}
-                />
-                <View style={{borderBottomWidth:1, borderBottomColor:"#D8D8D8"}}>
-
-                </View>
+            <View style={styles.inputView}>
+            <TextInput
+                style={styles.TextInput}
+                placeholder="Email"
+                placeholderTextColor="#003f5c"
+                onChangeText={(value=>emailChange(value))}
+            />
             </View>
 
-            <View>
-                <Text style={styles.inputTitle}>Phone</Text>
-                <View>
-                <TextInput
-                    placeholder="Phone"
-                    style={styles.input}
-                    onChangeText={(value)=>phoneChange(value)}
-                />
-                <View style={{borderBottomWidth:1, borderBottomColor:"#D8D8D8"}}>
-
-                </View>
+            <View style={styles.inputView}>
+            <TextInput
+                style={styles.TextInput}
+                placeholder="Phone"
+                placeholderTextColor="#003f5c"
+                onChangeText={(value=>phoneChange(value))}
+            />
             </View>
 
-            <View>
-                <Text style={styles.inputTitle}>Title</Text>
-                <TextInput
-                    placeholder="Title"
-                    style={styles.input}
-                    onChangeText={(value)=>titleChange(value)}
-                />
-                </View>
-                <View style={{borderBottomWidth:1, borderBottomColor:"#D8D8D8"}}>
-
-                </View>
+            <View style={styles.inputView}>
+            <TextInput
+                style={styles.TextInput}
+                placeholder="Title"
+                placeholderTextColor="#003f5c"
+                onChangeText={(value=>titleChange(value))}
+            />
             </View>
 
-            <View>
-                <Text style={styles.inputTitle}>Password</Text>
-                <TextInput
-                    placeholder="Password"
-                    secureTextEntry={true}
-                    style={styles.input}
-                    onChangeText={(value)=>passwordChange(value)}
-                />
-                <View style={{borderBottomWidth:1, borderBottomColor:"#D8D8D8"}}>
-
-                </View>
+            <View style={styles.inputView}>
+            <TextInput
+                style={styles.TextInput}
+                placeholder="Password"
+                placeholderTextColor="#003f5c"
+                onChangeText={(value=>passwordChange(value))}
+            />
             </View>
 
-            <View>
-                <Text style={styles.inputTitle}>Confirm Password</Text>
-                <TextInput
-                    placeholder="Confirm Password"
-                    secureTextEntry={true}
-                    style={styles.input}
-                    onChangeText={(value)=>confirmPasswordChange(value)}
-                />
-                <View style={{borderBottomWidth:1, borderBottomColor:"#D8D8D8"}}>
-
-                </View>
+            <View style={styles.inputView}>
+            <TextInput
+                style={styles.TextInput}
+                placeholder="Confirm Password"
+                placeholderTextColor="#003f5c"
+                onChangeText={(value=>confirmPasswordChange(value))}
+            />
             </View>
             
-            <TouchableOpacity style={styles.submitContainer} onPress={()=>handlePersonalSubmit(data.name, data.email, data.phone, data.location, data.password, data.confirmPassword,data.title)}>
-                <Text style={[styles.text, {color:"#fff", fontWeight:"600", fontSize:16}]}>Register</Text>
+            <TouchableOpacity style={styles.loginBtn} onPress={()=>handlePersonalSubmit(data)}>
+                <Text style={styles.loginText}>Register</Text>
             </TouchableOpacity>
 
             <Text style={[styles.text, {fontSize:14, color:"#ABB4BD", textAlign:"center", marginTop:24}]}>
@@ -215,40 +192,74 @@ function Personal({navigation}) {
                 onPress={() =>
                     navigation.navigate('Login')
                 }>Login!</Text></Text>
-        </View>
-    </ScrollView>
+    </SafeAreaView>
   );
 }
 
 function Organization() {
   return (
-    <ScrollView style={styles.container}>
-        <View>
-            <View style={{marginTop:90, marginBottom:50, alignItems:"center", justifyContent:"center"}}>
-                <Text style={[styles.text, {marginTop:10, fontSize:22, fontWeight:"500"}]}>Organization Account</Text>
+    <SafeAreaView style={styles.container}>
+            <View>
+                <Text style={[styles.text, {marginBottom:35, fontSize:22, fontWeight:"500"}]}>Organization Account</Text>
+            </View>
+            <View style={styles.inputView}>
+            <TextInput
+                style={styles.TextInput}
+                placeholder="Full Name"
+                placeholderTextColor="#003f5c"
+            />
             </View>
 
-            <InputTextField title="Organization Name"></InputTextField>
-            <InputTextField title="Organization Email"></InputTextField>
-            <InputTextField title="Organization Phone"></InputTextField>
-            <InputTextField title="Organization Location"></InputTextField>
+            <View style={styles.inputView}>
+            <TextInput
+                style={styles.TextInput}
+                placeholder="Email"
+                placeholderTextColor="#003f5c"
+            />
+            </View>
 
-            <InputTextField 
-                title="Password"
-                style={{marginTop:32, marginBottom:8}}
-                isSecure = {true}
-            ></InputTextField>
-            <InputTextField 
-                title="Confirm Password"
-                style={{marginTop:32, marginBottom:8}}
-                isSecure = {true}
-            ></InputTextField>
+            <View style={styles.inputView}>
+            <TextInput
+                style={styles.TextInput}
+                placeholder="Phone"
+                placeholderTextColor="#003f5c"
+            />
+            </View>
+
+            <View style={styles.inputView}>
+            <TextInput
+                style={styles.TextInput}
+                placeholder="Title"
+                placeholderTextColor="#003f5c"
+            />
+            </View>
+
+            <View style={styles.inputView}>
+            <TextInput
+                style={styles.TextInput}
+                placeholder="Password"
+                placeholderTextColor="#003f5c"
+            />
+            </View>
+
+            <View style={styles.inputView}>
+            <TextInput
+                style={styles.TextInput}
+                placeholder="Confirm Password"
+                placeholderTextColor="#003f5c"
+            />
+            </View>
             
-            <TouchableOpacity style={styles.submitContainer}>
-                <Text style={[styles.text, {color:"#fff", fontWeight:"600", fontSize:16}]}>Register</Text>
+            <TouchableOpacity style={styles.loginBtn}>
+                <Text style={styles.loginText}>Create Account</Text>
             </TouchableOpacity>
-        </View>
-    </ScrollView>
+
+            <Text style={[styles.text, {fontSize:14, color:"#ABB4BD", textAlign:"center", marginTop:24}]}>
+                Already Have an Account? <Text style={styles.text, styles.link}
+                onPress={() =>
+                    navigation.navigate('Login')
+                }>Login!</Text></Text>
+    </SafeAreaView>
   );
 }
 
@@ -286,41 +297,48 @@ export default function Register() {
 }
 
 const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        backgroundColor: '#ffff',
-        paddingHorizontal:30
-    },
-    text:{
-        fontFamily:"Avenir Next",
-        color:"#1D2029"
-    },
-    link:{
-        color:"#FF1654",
-        fontSize:14,
-        fontWeight:"500"
-    },
-    submitContainer:{
-        backgroundColor:"#009387",
-        fontSize:14,
-        borderRadius:4,
-        paddingVertical:12,
-        marginTop:32,
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+       },
+     
+       image :{
+        marginBottom: 40
+     
+      },
+      inputView: {
+        backgroundColor: "rgb(144,238,144)",
+        borderRadius: 30,
+        width: "90%",
+        height: 45,
+        marginBottom: 20,
+      },
+      
+      TextInput: {
+        height: 50,
+        flex: 1,
+        padding: 10,
+        marginLeft: 20,
+      },
+      forgot_button: {
+        height: 30,
+        marginBottom: 30,
+      },
+      loginBtn:{
+        width:"90%",
+        borderRadius:25,
+        height:50,
         alignItems:"center",
         justifyContent:"center",
-        shadowColor:"rgba(255, 22, 84, 0.24)",
-        shadowOffset:{width:0, height:9},
-        shadowOpacity:1,
-        shadowRadius:20
+        marginTop:40,
+        backgroundColor:"#009387",
     },
-    inputTitle:{
-        color:"#ABB4BD",
-        fontSize:14
+    link:{
+        color:"red"
     },
-    input:{
-        paddingVertical:12,
-        color:"#1D2029",
-        fontSize:14,
-        fontFamily:"Avenir Next"
+    loginText:{
+        color:"white"
     }
 }) 

@@ -6,7 +6,9 @@ import {
     Image,
     ScrollView,
     TouchableOpacity,
-    Alert,TextInput
+    Alert,TextInput,
+    SafeAreaView,
+    ActivityIndicator
 } from "react-native";
 
 import axios from 'axios';
@@ -23,6 +25,7 @@ export default function Login({navigation}){
         email:"",
         password:""
     });
+    const [isActive, setIsActive] = React.useState(false)
 
     const { dispatch } = React.useContext(AuthContext);
 
@@ -44,10 +47,10 @@ export default function Login({navigation}){
         }
     }
 
-    const hanldeLogin=()=>{
+    const handleLogin=()=>{
+        setIsActive(true)
         let token = null;
         let userData = null
-        dispatch({type:'LOADING'})
         axios.post(`${domain}/api/auth/login`,{
             email:data.email,
             password:data.password,
@@ -84,96 +87,97 @@ export default function Login({navigation}){
         })
         .catch(error=>{
             Alert.alert('Inncorrect Credentials', 'Email or passowrd is not correct')
-            dispatch({type:'STOP_LOADING'})
+            setIsActive(false)
         })
     }
         return(
-                <ScrollView style={styles.container}>
-                    <View>
-                        <View style={{marginTop:130, alignItems:"center", justifyContent:"center"}}>
+                    <SafeAreaView style={styles.container}>
                             <Image source={require('../../assets/images/logo.png')} style={{height:150, width:150}}/>
-                            <Text style={[styles.text, {marginTop:5, marginBottom:20, fontSize:22, fontWeight:"500"}]}>Welcome</Text>
-                        </View>
-                        <View>
-                            <Text style={styles.inputTitle}>Email</Text>
+                            <View style={styles.inputView}>
                             <TextInput
-                                secureTextEntry={false}
-                                style={styles.input}
-                                autoCapitalize="none"
-                                onChangeText={(value) => textInputChange(value)}
+                                style={styles.TextInput}
+                                placeholder="Email"
+                                placeholderTextColor="#003f5c"
+                                onChangeText={(value=>textInputChange(value))}
                             />
-                            <View style={{borderBottomWidth:1, borderBottomColor:"#D8D8D8"}}>
-
                             </View>
-                        </View>
-                        <View style={styles.margin}>
-                            <Text style={styles.inputTitle}>Password</Text>
+                            <View style={styles.inputView}>
                             <TextInput
+                                style={styles.TextInput}
                                 secureTextEntry={true}
-                                style={styles.input}
+                                placeholder="Password"
+                                placeholderTextColor="#003f5c"
                                 onChangeText={(value=>passowrdInputChange(value))}
                             />
-                            <View style={{borderBottomWidth:1, borderBottomColor:"#D8D8D8"}}>
-
                             </View>
-                        </View>
-                        <Text style={[styles.text, styles.link,{textAlign:"right", marginTop:15}]}>Forgot Password?</Text>
-                        
-                        <TouchableOpacity style={styles.submitContainer}  onPress={()=>{hanldeLogin(data.email, data.password)}}>
-                            <Text style={[styles.text, {color:"#fff", fontWeight:"600", fontSize:16}]}>Login</Text>
-                        </TouchableOpacity>
+                            <TouchableOpacity>
+                                <Text style={styles.forgot_button}>Forgot Password?</Text>
+                            </TouchableOpacity>
+
+                            {!isActive?
+                            <TouchableOpacity style={styles.loginBtn} onPress={()=>handleLogin()}>
+                                <Text style={styles.loginText}>LOGIN</Text>
+                            </TouchableOpacity>
+                            :
+                            <TouchableOpacity style={styles.loginBtn}>
+                                <ActivityIndicator size="small" color="#fff" />
+                            </TouchableOpacity>
+                            }
 
                         <Text style={[styles.text, {fontSize:14, color:"#ABB4BD", textAlign:"center", marginTop:24}]}>
-                            Don't have an account,? <Text style={styles.text, styles.link}
+                            Don't have an account,? <Text style={styles.link}
                             onPress={() =>
                                     navigation.navigate('Register')
                                 }
                             >Register Now!</Text>
                         </Text>
-                    </View>
-                </ScrollView>
+                </SafeAreaView>
         );
     }
 
 const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        backgroundColor: '#ffff',
-        paddingHorizontal:30
-    },
-    text:{
-        fontFamily:"Avenir Next",
-        color:"#1D2029"
-    },
-    link:{
-        color:"#FF1654",
-        fontSize:14,
-        fontWeight:"500"
-    },
-    submitContainer:{
-        backgroundColor:"#009387",
-        fontSize:14,
-        borderRadius:4,
-        paddingVertical:12,
-        marginTop:32,
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+       },
+     
+       image :{
+        marginBottom: 40
+     
+      },
+      inputView: {
+        backgroundColor: "rgb(144,238,144)",
+        borderRadius: 30,
+        width: "90%",
+        height: 45,
+        marginBottom: 20,
+      },
+      
+      TextInput: {
+        height: 50,
+        flex: 1,
+        padding: 10,
+        marginLeft: 20,
+      },
+      forgot_button: {
+        height: 30,
+        marginBottom: 30,
+      },
+      loginBtn:{
+        width:"90%",
+        borderRadius:25,
+        height:50,
         alignItems:"center",
         justifyContent:"center",
-        shadowColor:"rgba(255, 22, 84, 0.24)",
-        shadowOffset:{width:0, height:9},
-        shadowOpacity:1,
-        shadowRadius:20
+        marginTop:40,
+        backgroundColor:"#009387",
     },
-    inputTitle:{
-        color:"#ABB4BD",
-        fontSize:14
+    link:{
+        color:"red"
     },
-    input:{
-        paddingVertical:12,
-        color:"#1D2029",
-        fontSize:14,
-        fontFamily:"Avenir Next"
-    },
-    margin:{
-        marginTop:20
+    loginText:{
+        color:"white"
     }
 }) 

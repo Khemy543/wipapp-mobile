@@ -5,23 +5,63 @@ import {
     StyleSheet,
     Dimensions,
     Image,
-    AsyncStorage
+    SafeAreaView
 } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import * as Animatable from "react-native-animatable"
 
+const clear = async () => {
+    try {
+      await AsyncStorage.removeItem('@storage_Key')
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@storage_Key')
+      if(value !== null) {
+          return value
+      }
+    } catch(e) {
+      console.log(e)
+    }
+  }
+  
 
 export default function SplashScreen({navigation}){
 
     useEffect(()=>{
-        setTimeout(()=>{
-            navigation.replace("Login")
-        },1500
-    )
+        getScreen();
+       /*  clearStorage() */
     },[])
 
+    const getScreen= async ()=>{
+        const firstLaunch = await getData();
+        if(getData === undefined){
+            setTimeout(()=>{
+                navigation.replace("onboarding")
+            },1500
+        )
+        }else{
+            setTimeout(()=>{
+                navigation.replace("Login")
+            },1500
+        )
+        }
+        
+    }
+
+    const clearStorage= async ()=>{
+        await clear();
+    }
+
+    
+
     return(
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <View style={styles.header}>
                 <Animatable.Image 
                     animation="bounceIn"
@@ -33,7 +73,7 @@ export default function SplashScreen({navigation}){
             <View style={styles.footer}>
                 <Text style={styles.footerText}>Powered By Orion Innovations</Text>
             </View>
-        </View>
+        </SafeAreaView>
     )
 }
 

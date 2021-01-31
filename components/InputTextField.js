@@ -30,7 +30,6 @@ const styles = StyleSheet.create({
     input:{
         paddingVertical:12,
         color:"#1D2029",
-        fontSize:14,
-        fontFamily:"Avenir Next"
+        fontSize:14
     }
 })

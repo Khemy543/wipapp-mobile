@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet } from 'react-native';
+import {View, StyleSheet, Alert } from 'react-native';
 import {
     Avatar,
     Title,
@@ -39,7 +39,6 @@ export default function DrawerContent(props){
         }catch(e){
           console.log(e)
         }
-        console.log(token)
         axios.post(`${domain}/api/auth/logout`,null,
         {headers:{'Authorization':`Bearer ${token}`}})
       .then(async(res)=>{
@@ -53,9 +52,28 @@ export default function DrawerContent(props){
           dispatch({type:'LOGOUT'})
       })
       .catch(error=>{
-          console.log(error)
+          console.log(error.response.data);
+          dispatch({type:'STOP_LOADING'})
       })
       }
+
+      const alertSignOut = () =>{
+        props.navigation.closeDrawer()
+        Alert.alert(
+        "Sign Out",
+        "Are You Sure?",
+        [
+            {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel"
+            },
+            { text: "OK", onPress: () => signOut() }
+        ],
+        { cancelable: false }
+        );
+    }
+
 
     return(
         <View style={{flex:1}}>
@@ -106,6 +124,14 @@ export default function DrawerContent(props){
                         />
                         <DrawerItem 
                             icon={(color,size)=>(
+                                <Icon name="credit-card-outline"  color={color.color} size={25}/>
+                            )}
+                            label="Payment"
+                            onPress={()=>props.navigation.navigate('UserDetails')}
+
+                        />
+                        <DrawerItem 
+                            icon={(color,size)=>(
                                 <Icon name="settings-outline"  color={color.color} size={25}/>
                             )}
                             label="Settings"
@@ -125,7 +151,7 @@ export default function DrawerContent(props){
                         />
                     )}
                     label="Sign Out"
-                    onPress={()=>signOut()}
+                    onPress={()=>alertSignOut()}
                 />
             </Drawer.Section>
         </View>

@@ -13,8 +13,11 @@ import axios from 'axios'
 import ManageBins from './views/DashboardScreens/ManageBins/ManageBins';
 import Rewards from './views/DashboardScreens/Rewards/Rewards';
 import Settings from './views/DashboardScreens/Settings/Settings';
+import MainPaymentStack from './views/DashboardScreens/Payment/PaymentStack';
+import Maps from './views/DashboardScreens/Maps/Maps';
 
 const Drawer = createDrawerNavigator();
+const MainStack = createStackNavigator();
 
 var domain = "https://wipap.herokuapp.com";
 
@@ -27,7 +30,6 @@ const initialLoginState = {
 };
 
 const loginReducer = (prevState, action) =>{
-  console.log("my_action",action)
   switch( action.type ){
     case 'LOADING':
       return {
@@ -108,8 +110,6 @@ export default function App(props) {
           }
         }
       })
-      
-      console.log("userToken : ",userToken)
     };
 
     bootstrapAsync();
@@ -118,100 +118,11 @@ export default function App(props) {
 
   const [loginState, dispatch] = React.useReducer(loginReducer, initialLoginState)
 
-  /* const authContext = React.useMemo(() => ({
-    signIn: async(email, password) => {
-      axios.post(`${domain}/api/auth/login`,{
-        email:email,
-        password:password,
-        lat:'25',
-        long:'24'
-    })
-    .then(async(res)=>{
-        console.log(res.data);
-        let token = res.data.access_token
-        let userData = null;
-        try{
-            await AsyncStorage.setItem('userToken', token);
-        } catch(e){
-          console.log(e)
-        }
-
-        axios.get(`${domain}/api/auth/user`,
-        {headers:{'Authorization':`Bearer ${token}`}})
-        .then(res=>{
-          console.log(res.data);
-          userData = res.data
-        })
-        .catch(async(error)=>{
-          console.log(error.response.data);
-          if(error.response.data.message === "Unauthenticated."){
-            try{
-              AsyncStorage.removeItem('userToken')
-            }catch(e){
-              console.log(e)
-            }
-          }
-        })
-      
-        dispatch({type:'LOGIN', token:token, data:userData})
-    })
-    .catch(error=>{
-        console.log(error)
-    })
-    },
-    signOut: async() => {
-      let token=null;
-      try{
-         token = await AsyncStorage.getItem('userToken')
-      }catch(e){
-        console.log(e)
-      }
-      console.log(token)
-      axios.post(`${domain}/api/auth/logout`,null,
-      {headers:{'Authorization':`Bearer ${token}`}})
-    .then(async(res)=>{
-        console.log(res.data)
-        try{
-          await AsyncStorage.removeItem('userToken')
-        }
-        catch(e){
-          console.log(e)
-        }
-        dispatch({type:'LOGOUT'})
-    })
-    .catch(error=>{
-        console.log(error)
-    })
-    },
-    signUpPersonal: (name, email, phone, location, password, title) => {
-        axios.post(`${domain}/api/auth/register`,
-        {
-            name:name,
-            email:email,
-            location:location,
-            phone:phone,
-            password:password,
-            title:title
-        })
-        .then(res=>{
-            console.log(res.data);
-           Alert.alert('Success!',"Registration Successful");
-            dispatch({type:'REGISTER_PERSONAL'});
-        })
-        .catch(error=>{
-            console.log(error);
-        })
-    },
-    signUpOrganization: () => {
-      setIsLoading(false)
-    },
-  }),[]); */
-
 
   if(loginState.isLoading){
     return(
-      <View style={{flex:1, justifyContent:"center", alignItems:"center", backgroundColor:'transparent'}}>
-        <ActivityIndicator size="large" />
+      <View style={styles.container}>
+        <ActivityIndicator size="small" color="black" />
       </View>
     )
   }
@@ -225,10 +136,11 @@ export default function App(props) {
         (
         <Drawer.Navigator drawerContent={props => <DrawerContent {...props}/>}>
           <Drawer.Screen name="HomeDrawer" component={MainTabScreen}/>
-          <Drawer.Screen name="Profile" component={Profile}/>
+          <Drawer.Screen name="Profile" component={Profile} />
           <Drawer.Screen name="ManageBins" component={ManageBins}/>
           <Drawer.Screen name="Rewards" component={Rewards}/>
           <Drawer.Screen name="Settings" component={Settings}/>
+          <Drawer.Screen name="UserDetails" component={MainPaymentStack}/>
         </Drawer.Navigator>
         ) 
         :
@@ -238,3 +150,9 @@ export default function App(props) {
     </AuthContext.Provider>
   );
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center"
+  }
+});

@@ -17,10 +17,19 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier":"com.orion.wipapp",
+      "config":{
+        "googleMapsApiKey":"AIzaSyAYM1fQvc6KmS7iBCEGv5thBc2vSTK8HgM"
+      }
     },
     "android": {
-      "package": "com.yourcompany.yourappname",
+      "package": "com.orion.wipapp",
+      "config":{
+        "googleMaps":{
+          "apiKey":"AIzaSyCm0aSNr7H_ckIbfzZ3Hm2pI2We6l8zb6k"
+        }
+      },
       "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",

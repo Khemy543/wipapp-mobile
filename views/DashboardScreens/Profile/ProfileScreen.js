@@ -12,169 +12,90 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import{ AuthContext } from '../../../context.js'
 
 
-export default function Profile({navigation}){
+export default function Profile({route,navigation}){
 
     const { dispatch, loginState } = React.useContext(AuthContext);
     const [data, setData] = React.useState([])
 
     React.useState(()=>{
-        console.log("login",loginState)
+        console.log("login",route)
         if(loginState.userData !== null){
             setData(loginState.userData)
         }
     },[])
 
-
-    return(
-        <SafeAreaView style={styles.container}>
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <View style={styles.titlebar}>
-                    <Icon name="menu" size={24}  onPress={()=>navigation.openDrawer()}/>
-                    <Text style={{fontWeight:'bold',fontSize:16}}>Profile</Text>
+        return (
+          <View style={styles.container}>
+              <View style={styles.header}></View>
+              <Image style={styles.avatar} source={{uri: 'https://bootdey.com/img/Content/avatar/avatar6.png'}}/>
+              <View >
+                <View style={styles.bodyContent}>
+                  <Text style={styles.name}>{data.name}</Text>
+                  <Text style={styles.info}>{data.email}</Text>
+                  <Text style={styles.description}>{data.phone}</Text>
                 </View>
-                <View style={{alignSelf:"center"}}>
-                    <View style={styles.profileImage}>
-                        <Image source={require('../../../assets/images/logo.png')} style={styles.image} resizeMode="center" />
-                    </View>
-                    <View style={styles.dm}>
-                        
-                    </View>
-                    <View style={styles.active}></View>
-                    <View style={styles.add}>
-
-                    </View>
-                 </View>
-                 <View style={styles.infoContainer}>
-                    <Text style={[styles.text, {fontWeight:"200", fontSize:36}]}>{data.name}</Text>
-                    <Text style={[styles.text, {color:"#AEB5BC", fontSize:14}]}>{data.email}</Text>
-                 </View>
-                 <Text style={[styles.subText,styles.recent]}>Profile Info</Text>
-
-                 <View style={{alignItems:'center'}}>
-                    <View style={styles.recentItem}>
-                        <View style={styles.recentItemIndicator}></View>
-                        <View style={{width:250}}>
-                                <Text style={{fontWeight:"400"}}>
-                                    {data.title}
-                            </Text>
-                        </View>
-                    </View>
-                 </View>
-
-                 <View style={{alignItems:'center'}}>
-                    <View style={styles.recentItem}>
-                        <View style={styles.recentItemIndicator}></View>
-                        <View style={{width:250}}>
-                                <Text style={{fontWeight:"400"}}>
-                                    {data.email}
-                            </Text>
-                        </View>
-                    </View>
-                 </View>
-
-                 <View style={{alignItems:'center'}}>
-                    <View style={styles.recentItem}>
-                        <View style={styles.recentItemIndicator}></View>
-                        <View style={{width:250}}>
-                                <Text style={{fontWeight:"400"}}>
-                                    {data.phone}
-                            </Text>
-                        </View>
-                    </View>
-                 </View>
-
-                 <View style={{alignItems:'center'}}>
-                    <View style={styles.recentItem}>
-                        <View style={styles.recentItemIndicator}></View>
-                        <View style={{width:250}}>
-                            <Text style={[styles.text,{color:"#41444B", fontWeight:"300"}]}>
-                                Started Following {""}
-                                <Text style={{fontWeight:"400"}}>
-                                    Jake and me
-                                </Text>
-                            </Text>
-                        </View>
-                    </View>
-                 </View>
-                 
-            </ScrollView>
-        </SafeAreaView>
-    );
-}
-
-const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        backgroundColor:"#fff"
-    },
-    text:{
-        color:"#52575D",
-
-    },
-    subText:{
-        fontSize:12,
-        color:"#AEB5BC",
-        textTransform:"uppercase",
-        fontWeight:"500"
-    },
-    image:{
-        flex:1,
-        width:undefined,
-        height:undefined
-    },
-    titlebar:{
-        flexDirection:"row",
-        justifyContent:"space-between",
-        margin:24,
-        marginHorizontal:16
-    },
-    profileImage:{
-        width:200,
+            </View>
+          </View>
+        );
+      }
+    
+    const styles = StyleSheet.create({
+      container:{
+        flex:1
+      },
+      header:{
+        backgroundColor: "rgb(144,238,144)",
         height:200,
-        borderRadius:100,
-        overflow:"hidden"
-    },
-    dm:{
-        backgroundColor:"#41444B",
-        position:'absolute',
-        top:20,
-        width:40,
-        height:40,
-        borderRadius:20,
-        alignItems:"center",
-        justifyContent:"center"
-    },
-    active:{
-        backgroundColor:"#34FFB9",
-        position:'absolute',
-        bottom:28,
-        left:10,
-        padding:4,
-        height:20,
-        width:20,
-        borderRadius:10
-    },
-    infoContainer:{
-        alignItems:'center',
-    },
-    recent:{
-        marginLeft:78,
-        marginTop:32,
-        marginBottom:6,
-        fontSize:10
-    },
-    recentItem:{
-        flexDirection:'row',
-        alignItems:"flex-start",
-        marginBottom:16
-    },
-    recentItemIndicator:{
-        backgroundColor:"#CABFAB",
-        padding:4,
-        height:12,
-        width:12,
-        borderRadius:6,
-        marginTop:3,
-        marginRight:20
-    }
-})
+      },
+      avatar: {
+        width: 130,
+        height: 130,
+        borderRadius: 63,
+        borderWidth: 4,
+        borderColor: "white",
+        marginBottom:10,
+        alignSelf:'center',
+        position: 'absolute',
+        marginTop:130
+      },
+      name:{
+        fontSize:22,
+        color:"#FFFFFF",
+        fontWeight:'600',
+      },
+      body:{
+        marginTop:40,
+      },
+      bodyContent: {
+        marginTop:50,
+        alignItems: 'center',
+        padding:30,
+      },
+      name:{
+        fontSize:28,
+        color: "black",
+        fontWeight: "600"
+      },
+      info:{
+        fontSize:16,
+        color: "#00BFFF",
+        marginTop:10
+      },
+      description:{
+        fontSize:16,
+        color: "#696969",
+        marginTop:10,
+        textAlign: 'center'
+      },
+      buttonContainer: {
+        marginTop:10,
+        height:45,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom:20,
+        width:250,
+        borderRadius:30,
+        backgroundColor: "#00BFFF",
+      },
+    });

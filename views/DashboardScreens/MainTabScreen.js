@@ -1,12 +1,12 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Calender from './Calender/Calender';
 import Notificatioin from './Notifications/Notifications';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Maps from './Maps/Maps.js';
 
-const Tab = createMaterialBottomTabNavigator();
+const Tab = createBottomTabNavigator();
 
 const HomeStack = createStackNavigator();
 const NotificatioinStack = createStackNavigator();
@@ -22,19 +22,8 @@ const MainTabScreen=()=>(
         component={HomeStackScreen}
         options={{
           tabBarLabel: 'Home',
-          tabBarColor:"green",
           tabBarIcon: ({ color, size }) => (
             <Icon name="home" color={color} size={26} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Request Pick Up"
-        component={MapsScreenStack}
-        options={{
-          tabBarLabel: 'Request Pick Up',
-          tabBarIcon: ({ color,size }) => (
-            <Icon name="google-maps" color={color} size={26} />
           ),
         }}
       />
@@ -72,6 +61,15 @@ const HomeStackScreen=({navigation})=>(
             )
           }}
         />
+        <HomeStack.Screen name="Request Pick Up" component={Maps}
+          options={{
+            headerLeft: ()=>(
+              <Icon name="menu" size={25} backgroundColor="white" color="black" style={{left:10}}
+                onPress={()=>navigation.openDrawer()}
+              />
+            )
+          }}
+        />
       </HomeStack.Navigator>
 );
 
@@ -86,7 +84,7 @@ const NotificationScreenStack=({navigation})=>(
       <NotificatioinStack.Screen name="Notifications" component={Notificatioin}
         options={{
             headerLeft: ()=>(
-              <Icon name="menu" size={25} backgroundColor="#009387" color="#fff" style={{left:10}}
+              <Icon name="menu" size={25} backgroundColor="white" color="black" style={{left:10}}
                 onPress={()=>navigation.openDrawer()}
               />
             )
@@ -94,23 +92,3 @@ const NotificationScreenStack=({navigation})=>(
       />
     </NotificatioinStack.Navigator>
 ); 
-
-const MapsScreenStack=({navigation})=>(
-    <MapsStack.Navigator
-       screenOptions={{
-        headerTitleStyle:{
-          fontWeight:"bold"
-        }
-      }}
-      >
-        <MapsStack.Screen name="Request Pick Up" component={Maps}
-          options={{
-              headerLeft: ()=>(
-                <Icon name="menu" size={25} backgroundColor="#009387" color="#fff" style={{left:10}}
-                  onPress={()=>navigation.openDrawer()}
-                />
-              )
-            }}
-        />
-      </MapsStack.Navigator>
-  );
